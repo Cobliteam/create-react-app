@@ -411,8 +411,8 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       async: false,
       watch: paths.appSrc,
-      tsconfig: require.resolve('./typescript/tsconfig.json'),
-      tslint: require.resolve('./typescript/tslint.json'),
+      tsconfig: paths.appTsConfig,
+      tslint: require.resolve('./tslint'),
     }),
   ],
 
