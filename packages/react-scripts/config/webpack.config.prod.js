@@ -505,8 +505,8 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       async: false,
       watch: paths.appSrc,
-      tsconfig: require.resolve('./typescript/tsconfig.json'),
-      tslint: require.resolve('./typescript/tslint.json'),
+      tsconfig: paths.appTsConfig,
+      tslint: require.resolve('./tslint'),
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
