@@ -96,6 +96,7 @@ module.exports = function(
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
+    storybook: 'react-scripts storybook',
   };
 
   // Setup the eslint config
@@ -184,10 +185,14 @@ module.exports = function(
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
 
-    const proc = spawn.sync(command, args.concat(['react', 'react-dom']), {
-      stdio: 'inherit',
-    });
-    if (proc.status !== 0) {
+    const procDependencies = spawn.sync(
+      command,
+      args.concat(['react', 'react-dom']),
+      {
+        stdio: 'inherit',
+      }
+    );
+    if (procDependencies.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;
     }
@@ -196,12 +201,14 @@ module.exports = function(
   // Custom DevDependencies
 
   const devDependencies = [
-    '@types/node',
     '@types/react',
     '@types/react-dom',
     '@types/jest',
-    'react-emotion',
+    '@types/enzyme',
+    '@types/enzyme-adapter-react-16',
+    'enzyme',
     'emotion',
+    'react-emotion',
     'typescript',
   ];
 
@@ -210,10 +217,15 @@ module.exports = function(
   );
   console.log();
 
-  const proc = spawn.sync(command, args.concat('-D').concat(devDependencies), {
-    stdio: 'inherit',
-  });
-  if (proc.status !== 0) {
+  const procDev = spawn.sync(
+    command,
+    args.concat('-D').concat(devDependencies),
+    {
+      stdio: 'inherit',
+    }
+  );
+
+  if (procDev.status !== 0) {
     console.error(
       `\`${command} ${args.concat(devDependencies).join(' ')}\` failed`
     );

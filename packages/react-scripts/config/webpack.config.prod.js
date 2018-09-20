@@ -319,6 +319,12 @@ module.exports = {
               // @remove-on-eject-end
               plugins: [
                 [
+                  require.resolve('babel-plugin-emotion'),
+                  {
+                    hoist: true,
+                  },
+                ],
+                [
                   require.resolve('babel-plugin-named-asset-import'),
                   {
                     loaderMap: {

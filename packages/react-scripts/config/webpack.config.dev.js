@@ -21,7 +21,10 @@ const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+<<<<<<< HEAD
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+=======
+>>>>>>> 9a8d581... Add storybook setup
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -246,6 +249,14 @@ module.exports = {
               ]),
               // @remove-on-eject-end
               plugins: [
+                [
+                  require.resolve('babel-plugin-emotion'),
+                  {
+                    autoLabel: true,
+                    sourceMap: true,
+                    labelFormat: '[filename]--[local]',
+                  },
+                ],
                 [
                   require.resolve('babel-plugin-named-asset-import'),
                   {
