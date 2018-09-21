@@ -10,7 +10,9 @@
 const babelJest = require('babel-jest');
 
 module.exports = babelJest.createTransformer({
-  presets: [require.resolve('babel-preset-react-app')],
+  presets: [
+    [require.resolve('@cobli/babel-preset-react-app'), { flow: false }],
+  ],
   babelrc: false,
   configFile: false,
 });
