@@ -38,8 +38,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
 
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)',
-      '<rootDir>/src/**/?(*.)(spec|test).(j|t)s?(x)',
+      '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs,ts,tsx}',
+      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs,ts,tsx}',
     ],
     testEnvironment: 'jsdom',
     testURL: 'http://localhost',
