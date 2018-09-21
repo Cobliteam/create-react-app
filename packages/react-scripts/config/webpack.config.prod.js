@@ -25,8 +25,13 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+<<<<<<< HEAD
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+=======
+// Need to wait new version of react-dev-utils
+// const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+>>>>>>> e2ec639... Comment getCacheIdentifier usage
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.

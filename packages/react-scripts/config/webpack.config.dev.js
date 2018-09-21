@@ -20,11 +20,16 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
+<<<<<<< HEAD
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 <<<<<<< HEAD
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 =======
 >>>>>>> 9a8d581... Add storybook setup
+=======
+// Need to wait new version of react-dev-utils
+// const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+>>>>>>> e2ec639... Comment getCacheIdentifier usage
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
