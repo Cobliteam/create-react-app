@@ -26,7 +26,7 @@ const procDependencies = spawn.sync(
 );
 
 if (procDependencies.status !== 0) {
-  console.error(`\`${command} ${args.join(' ')}\` failed`);
+  console.error(`\`${command}\` failed`);
   process.exit(1);
   return;
 }

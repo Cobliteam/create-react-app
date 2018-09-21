@@ -1,3 +1,5 @@
+'use strict';
+
 const TSDocgenPlugin = require('react-docgen-typescript-webpack-plugin');
 // Storybook does not work with Webpack 4, so I need to import webpack from storybook node_modules
 const webpack = require('@storybook/react/node_modules/webpack');

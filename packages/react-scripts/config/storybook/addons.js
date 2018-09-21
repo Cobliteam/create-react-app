@@ -1,2 +1,4 @@
-import '@storybook/addon-actions/register';
-import '@storybook/addon-links/register';
+'use strict';
+
+require('@storybook/addon-actions/register');
+require('@storybook/addon-links/register');
