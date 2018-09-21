@@ -22,7 +22,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
           // @remove-on-eject-end
           presets: [
             [
-              require.resolve('babel-preset-react-app'),
+              require.resolve('@cobli/babel-preset-react-app'),
               {
                 flow: false,
               },
@@ -39,7 +39,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
               },
             ],
             [
-              require.resolve('babel-plugin-named-asset-import'),
+              require.resolve('@cobli/babel-plugin-named-asset-import'),
               {
                 loaderMap: {
                   svg: {

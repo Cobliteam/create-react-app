@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const spawn = require('react-dev-utils/crossSpawn');
+const spawn = require('@cobli/react-dev-utils/crossSpawn');
 const paths = require('../config/paths');
 const useYarn = fs.existsSync(path.join(paths.appPath, 'yarn.lock'));
 

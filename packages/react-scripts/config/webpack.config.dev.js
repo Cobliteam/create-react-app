@@ -13,23 +13,15 @@ const webpack = require('webpack');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const InterpolateHtmlPlugin = require('@cobli/react-dev-utils/InterpolateHtmlPlugin');
+const WatchMissingNodeModulesPlugin = require('@cobli/react-dev-utils/WatchMissingNodeModulesPlugin');
+const ModuleScopePlugin = require('@cobli/react-dev-utils/ModuleScopePlugin');
+const getCSSModuleLocalIdent = require('@cobli/react-dev-utils/getCSSModuleLocalIdent');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
-<<<<<<< HEAD
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
-<<<<<<< HEAD
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-=======
->>>>>>> 9a8d581... Add storybook setup
-=======
-// Need to wait new version of react-dev-utils
-// const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
->>>>>>> e2ec639... Comment getCacheIdentifier usage
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -104,7 +96,7 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('react-dev-utils/webpackHotDevClient'),
+    require.resolve('@cobli/react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
     paths.appIndexTsx,
     // We include the app code last so that if there is a runtime error during
