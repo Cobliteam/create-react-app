@@ -209,6 +209,7 @@ module.exports = function(
     'enzyme',
     'emotion',
     'react-emotion',
+    'react-hot-loader',
     'typescript',
   ];
 
