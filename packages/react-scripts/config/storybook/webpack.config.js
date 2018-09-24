@@ -9,51 +9,9 @@ module.exports = (baseConfig, env, defaultConfig) => {
     test: /\.(ts|tsx)$/,
     use: [
       {
-        loader: require.resolve('thread-loader'),
+        loader: require.resolve('ts-loader'),
         options: {
-          poolTimeout: Infinity, // keep workers alive for more effective watch mode
-        },
-      },
-      {
-        loader: require.resolve('babel-loader'),
-        options: {
-          // @remove-on-eject-begin
-          babelrc: false,
-          // @remove-on-eject-end
-          presets: [
-            [
-              require.resolve('@cobli/babel-preset-react-app'),
-              {
-                flow: false,
-              },
-            ],
-            [require.resolve('@babel/preset-typescript')],
-          ],
-          plugins: [
-            [
-              require.resolve('babel-plugin-emotion'),
-              {
-                autoLabel: true,
-                sourceMap: true,
-                labelFormat: '[filename]--[local]',
-              },
-            ],
-            [
-              require.resolve('@cobli/babel-plugin-named-asset-import'),
-              {
-                loaderMap: {
-                  svg: {
-                    ReactComponent: 'svgr/webpack![path]',
-                  },
-                },
-              },
-            ],
-          ],
-          // This is a feature of `babel-loader` for webpack (not Babel itself).
-          // It enables caching results in ./node_modules/.cache/babel-loader/
-          // directory for faster rebuilds.
-          cacheDirectory: true,
-          highlightCode: true,
+          transpileOnly: true,
         },
       },
     ],
