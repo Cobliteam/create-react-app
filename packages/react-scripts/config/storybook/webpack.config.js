@@ -23,25 +23,12 @@ module.exports = (baseConfig, env, defaultConfig) => {
   defaultConfig.module.rules.push({
     test: /\.(ts|tsx)$/,
     use: [
-      // This loader parallelizes code compilation, it is optional but
-      // improves compile time on larger projects
-      {
-        loader: require.resolve('thread-loader'),
-        options: {
-          poolTimeout: Infinity, // keep workers alive for more effective watch mode
-        },
-      },
       {
         loader: require.resolve('babel-loader'),
         options: {
           babelrc: false,
           presets: [
-            [
-              require.resolve('@cobli/babel-preset-react-app'),
-              {
-                flow: false,
-              },
-            ],
+            [require.resolve('babel-preset-react-app'), { flow: false }],
             [require.resolve('@babel/preset-typescript')],
           ],
           plugins: [
@@ -54,7 +41,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
               },
             ],
             [
-              require.resolve('@cobli/babel-plugin-named-asset-import'),
+              require.resolve('babel-plugin-named-asset-import'),
               {
                 loaderMap: {
                   svg: {
@@ -70,7 +57,6 @@ module.exports = (baseConfig, env, defaultConfig) => {
           cacheDirectory: true,
           // Don't waste time on Gzipping the cache
           cacheCompression: false,
-          highlightCode: true,
         },
       },
       require.resolve('react-docgen-typescript-loader'),

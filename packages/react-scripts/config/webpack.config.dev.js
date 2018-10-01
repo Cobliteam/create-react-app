@@ -13,10 +13,10 @@ const webpack = require('webpack');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InterpolateHtmlPlugin = require('@cobli/react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('@cobli/react-dev-utils/WatchMissingNodeModulesPlugin');
-const ModuleScopePlugin = require('@cobli/react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('@cobli/react-dev-utils/getCSSModuleLocalIdent');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -96,7 +96,7 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('@cobli/react-dev-utils/webpackHotDevClient'),
+    require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
     paths.appIndexTsx,
     // We include the app code last so that if there is a runtime error during
@@ -230,8 +230,8 @@ module.exports = {
               babelrc: false,
               configFile: false,
               presets: [
-                [require.resolve('babel-preset-react-app'), { flow: false }], 
-                require.resolve('@babel/preset-typescript')
+                [require.resolve('babel-preset-react-app'), { flow: false }],
+                require.resolve('@babel/preset-typescript'),
               ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
@@ -264,7 +264,7 @@ module.exports = {
                     },
                   },
                 ],
-                'react-hot-loader/babel'
+                'react-hot-loader/babel',
               ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/

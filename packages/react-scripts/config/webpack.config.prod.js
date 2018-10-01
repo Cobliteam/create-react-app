@@ -22,7 +22,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const getCSSModuleLocalIdent = require('@cobli/react-dev-utils/getCSSModuleLocalIdent');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
@@ -303,7 +303,7 @@ module.exports = {
               configFile: false,
               presets: [
                 [require.resolve('babel-preset-react-app'), { flow: false }],
-                require.resolve('@babel/preset-typescript')
+                require.resolve('@babel/preset-typescript'),
               ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.

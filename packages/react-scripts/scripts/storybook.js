@@ -1,6 +1,6 @@
 'use strict';
 
-const spawn = require('@cobli/react-dev-utils/crossSpawn');
+const spawn = require('react-dev-utils/crossSpawn');
 const paths = require('../config/paths');
 
 console.log('Initializing Storybook...');
