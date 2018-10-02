@@ -179,7 +179,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|mjs|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         enforce: 'pre',
         use: [
           {
@@ -190,6 +190,19 @@ module.exports = {
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
+                overrides: [
+                  {
+                    files: ['*.ts', '*.tsx'],
+                    parser: 'typescript-eslint-parser',
+                    rules: {
+                      'no-array-constructor': 'off',
+                      'no-multi-str': 'off',
+                      'no-restricted-globals': 'off',
+                      'no-undef': 'off',
+                      'no-unused-vars': 'off',
+                    },
+                  },
+                ],
               },
               ignore: false,
               useEslintrc: false,
@@ -421,7 +434,6 @@ module.exports = {
       async: false,
       watch: paths.appSrc,
       tsconfig: paths.appTsConfig,
-      tslint: require.resolve('./tslint'),
     }),
   ],
 

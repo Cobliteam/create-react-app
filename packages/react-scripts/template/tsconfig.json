@@ -13,8 +13,7 @@
     "jsx": "react",
     "moduleResolution": "node",
     "rootDirs": [
-      "src",
-      "stories"
+      "src"      
     ],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -31,6 +30,7 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "src/setupTests.ts",
+    "src/**/*.stories.tsx"
   ]
 }

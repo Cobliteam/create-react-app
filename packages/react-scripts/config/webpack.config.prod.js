@@ -113,7 +113,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the app code.
-  entry: [paths.appIndexJs],
+  entry: [paths.appIndexTsx],
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -250,7 +250,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|mjs|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         enforce: 'pre',
         use: [
           {
@@ -258,11 +258,22 @@ module.exports = {
               formatter: require.resolve('react-dev-utils/eslintFormatter'),
               eslintPath: require.resolve('eslint'),
               // @remove-on-eject-begin
-              // TODO: consider separate config for production,
-              // e.g. to enable no-console and no-debugger only in production.
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
+                overrides: [
+                  {
+                    files: ['*.ts', '*.tsx'],
+                    parser: 'typescript-eslint-parser',
+                    rules: {
+                      'no-array-constructor': 'off',
+                      'no-multi-str': 'off',
+                      'no-restricted-globals': 'off',
+                      'no-undef': 'off',
+                      'no-unused-vars': 'off',
+                    },
+                  },
+                ],
               },
               ignore: false,
               useEslintrc: false,
@@ -512,7 +523,6 @@ module.exports = {
       async: false,
       watch: paths.appSrc,
       tsconfig: paths.appTsConfig,
-      tslint: require.resolve('./tslint'),
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
