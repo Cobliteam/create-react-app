@@ -132,7 +132,8 @@ yarn build
 # Check for expected output
 exists build/*.html
 exists build/static/js/*.js
-exists build/static/css/*.css
+# Emotion does not generated a css file
+# exists build/static/css/*.css
 exists build/static/media/*.svg
 exists build/favicon.ico
 
