@@ -15,7 +15,7 @@ const procDependencies = spawn.sync(
 );
 
 if (procDependencies.status !== 0) {
-  console.error(`\`${command}\` failed`);
+  console.error('`Storybook` failed');
   process.exit(1);
   return;
 }
