@@ -187,7 +187,7 @@ module.exports = function(
 
     const procDependencies = spawn.sync(
       command,
-      args.concat(['react', 'react-dom']),
+      args.concat(['react', 'react-dom', 'emotion', 'react-emotion']),
       {
         stdio: 'inherit',
       }
@@ -210,8 +210,6 @@ module.exports = function(
     '@types/storybook__addon-info',
     '@types/storybook__react',
     'enzyme',
-    'emotion',
-    'react-emotion',
     'react-hot-loader',
     'typescript',
   ];
