@@ -74,6 +74,27 @@ function tryGitInit(appPath) {
   }
 }
 
+function installPackages(command, args, packages, isDev) {
+  console.log(
+    `Installing ${packages.join(', ')} to ${
+      isDev ? 'devDependencies' : 'dependencies'
+    } with ${command}...`
+  );
+  console.log();
+
+  const newArgs = isDev ? args.concat('-D') : args;
+  const proc = spawn.sync(command, newArgs.concat(packages), {
+    stdio: 'inherit',
+  });
+
+  if (proc.status !== 0) {
+    console.error(
+      `\`${command} ${newArgs.concat(packages).join(' ')}\` failed`
+    );
+    return;
+  }
+}
+
 module.exports = function(
   appPath,
   appName,
@@ -187,7 +208,7 @@ module.exports = function(
 
     const procDependencies = spawn.sync(
       command,
-      args.concat(['react', 'react-dom', 'emotion', 'react-emotion']),
+      args.concat(['react', 'react-dom']),
       {
         stdio: 'inherit',
       }
@@ -198,8 +219,8 @@ module.exports = function(
     }
   }
 
-  // Custom DevDependencies
-
+  // Custom Dependencies and DevDependencies
+  const dependencies = ['emotion', 'react-emotion'];
   const devDependencies = [
     '@types/react',
     '@types/react-dom',
@@ -214,25 +235,8 @@ module.exports = function(
     'typescript',
   ];
 
-  console.log(
-    `Installing ${devDependencies.join(', ')} as dev dependencies ${command}...`
-  );
-  console.log();
-
-  const procDev = spawn.sync(
-    command,
-    args.concat('-D').concat(devDependencies),
-    {
-      stdio: 'inherit',
-    }
-  );
-
-  if (procDev.status !== 0) {
-    console.error(
-      `\`${command} ${args.concat(devDependencies).join(' ')}\` failed`
-    );
-    return;
-  }
+  installPackages(command, args, dependencies, false);
+  installPackages(command, args, devDependencies, true);
 
   if (tryGitInit(appPath)) {
     console.log();
