@@ -74,6 +74,27 @@ function tryGitInit(appPath) {
   }
 }
 
+function installPackages(command, args, packages, isDev) {
+  console.log(
+    `Installing ${packages.join(', ')} to ${
+      isDev ? 'devDependencies' : 'dependencies'
+    } with ${command}...`
+  );
+  console.log();
+
+  const newArgs = isDev ? args.concat('-D') : args;
+  const proc = spawn.sync(command, newArgs.concat(packages), {
+    stdio: 'inherit',
+  });
+
+  if (proc.status !== 0) {
+    console.error(
+      `\`${command} ${newArgs.concat(packages).join(' ')}\` failed`
+    );
+    return;
+  }
+}
+
 module.exports = function(
   appPath,
   appName,
@@ -96,6 +117,7 @@ module.exports = function(
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
+    storybook: 'react-scripts storybook',
   };
 
   // Setup the eslint config
@@ -161,7 +183,6 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -185,12 +206,37 @@ module.exports = function(
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
 
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
+    const procDependencies = spawn.sync(
+      command,
+      args.concat(['react', 'react-dom']),
+      {
+        stdio: 'inherit',
+      }
+    );
+    if (procDependencies.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;
     }
   }
+
+  // Custom Dependencies and DevDependencies
+  const dependencies = ['emotion', 'react-emotion'];
+  const devDependencies = [
+    '@types/react',
+    '@types/react-dom',
+    '@types/jest',
+    '@types/enzyme',
+    '@types/enzyme-adapter-react-16',
+    '@types/storybook__addon-actions',
+    '@types/storybook__addon-info',
+    '@types/storybook__react',
+    'enzyme',
+    'react-hot-loader',
+    'typescript',
+  ];
+
+  installPackages(command, args, dependencies, false);
+  installPackages(command, args, devDependencies, true);
 
   if (tryGitInit(appPath)) {
     console.log();

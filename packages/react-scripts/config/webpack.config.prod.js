@@ -21,6 +21,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -112,7 +113,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the app code.
-  entry: [paths.appIndexJs],
+  entry: [paths.appIndexTsx],
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -215,7 +216,7 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx', '.ts', '.tsx'],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -249,7 +250,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|mjs|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         enforce: 'pre',
         use: [
           {
@@ -257,11 +258,22 @@ module.exports = {
               formatter: require.resolve('react-dev-utils/eslintFormatter'),
               eslintPath: require.resolve('eslint'),
               // @remove-on-eject-begin
-              // TODO: consider separate config for production,
-              // e.g. to enable no-console and no-debugger only in production.
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
+                overrides: [
+                  {
+                    files: ['*.ts', '*.tsx'],
+                    parser: 'typescript-eslint-parser',
+                    rules: {
+                      'no-array-constructor': 'off',
+                      'no-multi-str': 'off',
+                      'no-restricted-globals': 'off',
+                      'no-undef': 'off',
+                      'no-unused-vars': 'off',
+                    },
+                  },
+                ],
               },
               ignore: false,
               useEslintrc: false,
@@ -290,9 +302,8 @@ module.exports = {
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {
-            test: /\.(js|mjs|jsx)$/,
+            test: /\.(ts|tsx|js|mjs|jsx)$/,
             include: paths.appSrc,
-
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
@@ -301,13 +312,16 @@ module.exports = {
               // @remove-on-eject-begin
               babelrc: false,
               configFile: false,
-              presets: [require.resolve('babel-preset-react-app')],
+              presets: [
+                [require.resolve('babel-preset-react-app'), { flow: false }],
+                require.resolve('@babel/preset-typescript'),
+              ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
               // We remove this when the user ejects because the default
               // is sane and uses Babel options. Instead of options, we use
               // the react-scripts and babel-preset-react-app versions.
-              cacheIdentifier: getCacheIdentifier('production', [
+              cacheIdentifier: getCacheIdentifier('development', [
                 'babel-plugin-named-asset-import',
                 'babel-preset-react-app',
                 'react-dev-utils',
@@ -315,6 +329,12 @@ module.exports = {
               ]),
               // @remove-on-eject-end
               plugins: [
+                [
+                  require.resolve('babel-plugin-emotion'),
+                  {
+                    hoist: true,
+                  },
+                ],
                 [
                   require.resolve('babel-plugin-named-asset-import'),
                   {
@@ -498,6 +518,11 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
       publicPath: publicPath,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      async: false,
+      watch: paths.appSrc,
+      tsconfig: paths.appTsConfig,
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical

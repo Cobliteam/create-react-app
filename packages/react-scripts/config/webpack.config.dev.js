@@ -22,6 +22,7 @@ const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -97,7 +98,7 @@ module.exports = {
     // require.resolve('webpack/hot/dev-server'),
     require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    paths.appIndexTsx,
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -144,7 +145,7 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx', '.ts', '.tsx'],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -178,7 +179,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|mjs|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         enforce: 'pre',
         use: [
           {
@@ -189,6 +190,19 @@ module.exports = {
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
+                overrides: [
+                  {
+                    files: ['*.ts', '*.tsx'],
+                    parser: 'typescript-eslint-parser',
+                    rules: {
+                      'no-array-constructor': 'off',
+                      'no-multi-str': 'off',
+                      'no-restricted-globals': 'off',
+                      'no-undef': 'off',
+                      'no-unused-vars': 'off',
+                    },
+                  },
+                ],
               },
               ignore: false,
               useEslintrc: false,
@@ -218,7 +232,7 @@ module.exports = {
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {
-            test: /\.(js|mjs|jsx)$/,
+            test: /\.(ts|tsx|js|mjs|jsx)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
@@ -228,7 +242,10 @@ module.exports = {
               // @remove-on-eject-begin
               babelrc: false,
               configFile: false,
-              presets: [require.resolve('babel-preset-react-app')],
+              presets: [
+                [require.resolve('babel-preset-react-app'), { flow: false }],
+                require.resolve('@babel/preset-typescript'),
+              ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
               // We remove this when the user ejects because the default
@@ -243,6 +260,14 @@ module.exports = {
               // @remove-on-eject-end
               plugins: [
                 [
+                  require.resolve('babel-plugin-emotion'),
+                  {
+                    autoLabel: true,
+                    sourceMap: true,
+                    labelFormat: '[filename]--[local]',
+                  },
+                ],
+                [
                   require.resolve('babel-plugin-named-asset-import'),
                   {
                     loaderMap: {
@@ -252,6 +277,7 @@ module.exports = {
                     },
                   },
                 ],
+                'react-hot-loader/babel',
               ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -403,6 +429,11 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
       publicPath: publicPath,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      async: false,
+      watch: paths.appSrc,
+      tsconfig: paths.appTsConfig,
     }),
   ],
 
