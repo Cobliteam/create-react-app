@@ -23,6 +23,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const uuidv4 = require('uuid/v4');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -145,7 +146,16 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx', '.ts', '.tsx'],
+    extensions: [
+      '.mjs',
+      '.web.js',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+      '.ts',
+      '.tsx',
+    ],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -229,6 +239,32 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          {
+            test: /\.svg$/,
+            loader: undefined,
+            use: [
+              {
+                loader: require.resolve('@svgr/webpack'),
+                options: {
+                  replaceAttrValues: {
+                    '#FFF': 'currentColor',
+                  },
+                  svgoConfig: {
+                    plugins: [
+                      {
+                        removeDesc: false,
+                      },
+                      {
+                        cleanupIDs: {
+                          prefix: `svg-${uuidv4()}`,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {
@@ -264,17 +300,7 @@ module.exports = {
                   {
                     autoLabel: true,
                     sourceMap: true,
-                    labelFormat: '[filename]--[local]',
-                  },
-                ],
-                [
-                  require.resolve('babel-plugin-named-asset-import'),
-                  {
-                    loaderMap: {
-                      svg: {
-                        ReactComponent: '@svgr/webpack?-prettier,-svgo![path]',
-                      },
-                    },
+                    labelFormat: '[local]',
                   },
                 ],
                 'react-hot-loader/babel',

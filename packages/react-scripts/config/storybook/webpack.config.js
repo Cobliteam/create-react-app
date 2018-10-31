@@ -8,17 +8,35 @@ module.exports = (baseConfig, env, defaultConfig) => {
   );
 
   if (svgLoader) {
-    svgLoader.use = [
-      {
-        loader: svgLoader.loader,
-        options: {
-          noquotes: true,
-        },
-      },
-    ];
-
     svgLoader.loader = undefined;
   }
+
+  defaultConfig.module.rules.push({
+    test: /\.svg$/,
+    loader: undefined,
+    use: ({ resource }) => [
+      {
+        loader: require.resolve('@svgr/webpack'),
+        options: {
+          replaceAttrValues: {
+            '#FFF': 'currentColor',
+          },
+          svgoConfig: {
+            plugins: [
+              {
+                removeDesc: false,
+              },
+              {
+                cleanupIDs: {
+                  prefix: `svg${relative(context, resource)}`,
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  });
 
   defaultConfig.module.rules.push({
     test: /\.(ts|tsx)$/,
@@ -37,17 +55,7 @@ module.exports = (baseConfig, env, defaultConfig) => {
               {
                 autoLabel: true,
                 sourceMap: true,
-                labelFormat: '[filename]--[local]',
-              },
-            ],
-            [
-              require.resolve('babel-plugin-named-asset-import'),
-              {
-                loaderMap: {
-                  svg: {
-                    ReactComponent: 'svgr/webpack![path]',
-                  },
-                },
+                labelFormat: '[local]',
               },
             ],
           ],
